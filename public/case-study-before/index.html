@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>越群汽車｜Case Study Before States</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="case-study">
+      <header class="case-header">
+        <p>CASE STUDY ARCHIVE</p>
+        <h1>Usability Test Before States</h1>
+        <span>僅供作品集截圖，不連接 Final Prototype 資料。</span>
+      </header>
+
+      <nav class="state-nav" aria-label="Before 畫面切換">
+        <button class="active" data-state="rich-menu">Before 1<br />Rich Menu</button>
+        <button data-state="repair-status">Before 2<br />維修進度</button>
+        <button data-state="repair-photo">Before 3<br />維修照片</button>
+      </nav>
+
+      <section class="phone active" data-panel="rich-menu" aria-label="舊版 Rich Menu">
+        <div class="line-native"><button>←</button><b>LINE</b><span>聊天室</span></div>
+        <div class="chat-head"><span class="avatar">越</span><b>越群汽車官方帳號</b><span>☎</span></div>
+        <div class="chat">
+          <div class="bubble">
+            <p>您好！歡迎來到越群汽車。</p>
+            <p>請從下方選擇需要的服務。</p>
+          </div>
+        </div>
+        <div class="rich-menu">
+          <h2>遇到車況問題</h2>
+          <div><button>快速回報車況</button><button>LINE Call 技師協助</button></div>
+          <h2>預約服務</h2>
+          <div><button>線上預約進廠</button><button>查看預約紀錄</button></div>
+          <h2>維修服務</h2>
+          <div><button>查看維修進度</button><button>查看維修紀錄</button></div>
+          <h2>其他</h2>
+          <div><button>服務項目</button><button>常見問題</button></div>
+        </div>
+        <div class="line-input"><span>＋</span><p>輸入訊息</p><span>➤</span></div>
+      </section>
+
+      <section class="phone liff" data-panel="repair-status" aria-label="舊版維修進度">
+        <div class="liff-head"><button>×</button><b>越群汽車<small>LIFF</small></b><span>⋯</span></div>
+        <div class="page">
+          <button class="back">← 返回</button>
+          <h1>維修進度</h1>
+          <div class="summary"><h2>車輛</h2><dl><div><dt>車型</dt><dd>Toyota Corolla Cross</dd></div><div><dt>車牌</dt><dd>ABC-1234</dd></div></dl></div>
+          <span class="status-chip">等待車主確認</span>
+          <div class="summary"><h2>目前狀態</h2><dl><div><dt>狀態</dt><dd>技師已完成初步檢查</dd></div><div><dt>下一步</dt><dd>等待車主確認</dd></div></dl></div>
+          <button class="primary">查看檢查結果</button>
+          <button class="secondary">回 LINE 聯絡越群</button>
+        </div>
+      </section>
+
+      <section class="phone liff" data-panel="repair-photo" aria-label="舊版維修照片">
+        <div class="liff-head"><button>×</button><b>越群汽車<small>LIFF</small></b><span>⋯</span></div>
+        <div class="page">
+          <button class="back">← 返回</button>
+          <h1>本次維修紀錄</h1>
+          <div class="summary"><h2>維修摘要</h2><dl><div><dt>本次總額</dt><dd>NT$3,800</dd></div><div><dt>維修狀態</dt><dd>已完成</dd></div></dl></div>
+          <h2 class="photo-title">維修照片</h2>
+          <div class="thumbnails">
+            <div class="thumbnail"><span>維修前照片</span></div>
+            <div class="thumbnail"><span>維修後照片</span></div>
+          </div>
+          <p class="old-note">舊版僅顯示靜態縮圖，無法點擊放大查看細節。</p>
+          <button class="primary">完成／返回 LINE</button>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const buttons = document.querySelectorAll('[data-state]');
+      const panels = document.querySelectorAll('[data-panel]');
+      buttons.forEach((button) => button.addEventListener('click', () => {
+        buttons.forEach((item) => item.classList.toggle('active', item === button));
+        panels.forEach((panel) => panel.classList.toggle('active', panel.dataset.panel === button.dataset.state));
+        history.replaceState(null, '', `#${button.dataset.state}`);
+      }));
+      const requested = location.hash.slice(1);
+      const requestedButton = document.querySelector(`[data-state="${requested}"]`);
+      if (requestedButton) requestedButton.click();
+    </script>
+  </body>
+</html>

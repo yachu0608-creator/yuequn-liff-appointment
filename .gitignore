@@ -1,0 +1,9 @@
+node_modules/
+.runtime/
+dist/
+dist-high-fi/
+.env
+*.log
+*.tsbuildinfo
+node-portable.zip
+

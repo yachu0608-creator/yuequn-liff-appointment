@@ -291,7 +291,7 @@ function Chat({ go, events, messages, sendMessage, appointment, appointmentBefor
     go(target)
   }
   const submitMessage = () => { const message = input.trim(); if (!message) return; sendMessage(message); setInput('') }
-  return <main className="line-room"><div className="line-native-bar"><button onClick={() => go('line-profile')}>←</button><b>LINE</b><span>聊天室</span></div><div className="line-chat-head"><span className="line-avatar">越</span><b>越群汽車官方帳號</b><button aria-label="LINE Call" onClick={() => go('call')}>☎</button></div><div className="chat hub-chat"><div className="bubble"><p>您好！👋<br />歡迎來到越群汽車！</p><p>想預約保養、查看維修進度，<br />或遇到車況問題，都可以從下方選單開始。</p><p>您傳送的訊息僅供越群服務人員查看，<br />請放心詢問。</p><p>💡 需要真人協助？輸入「找小編」<br />我們會於服務時間依序回覆您。</p></div>
+  return <main className="line-room"><div className="line-native-bar"><button onClick={() => window.location.assign('https://yachu0608-creator.github.io/YUEQUN/')}>←</button><b>LINE</b><span>聊天室</span></div><div className="line-chat-head"><span className="line-avatar">越</span><b>越群汽車官方帳號</b><button aria-label="LINE Call" onClick={() => go('call')}>☎</button></div><div className="chat hub-chat"><div className="bubble"><p>您好！👋<br />歡迎來到越群汽車！</p><p>想預約保養、查看維修進度，<br />或遇到車況問題，都可以從下方選單開始。</p><p>您傳送的訊息僅供越群服務人員查看，<br />請放心詢問。</p><p>💡 需要真人協助？輸入「找小編」<br />我們會於服務時間依序回覆您。</p></div>
     {showCallHelp && <div className="bubble technician-call-help"><p>需要技師協助查看車況嗎？<br />請點選聊天室右上角的通話圖案，即可與技師聯繫。</p><p>通話前請先將車輛停妥，行駛中請勿操作手機；若暫時無人接聽，也可以先將目前的狀況與照片傳送至聊天室。</p></div>}
     {messages.map((message, index) => <div className="bubble user-bubble" key={`${message}-${index}`}>{message}</div>)}
     {has('editor-request') && <div className="bubble"><b>【已收到您的需求】</b><p>正在為您轉接真人服務，<br />越群服務人員將於服務時間依序回覆您。</p></div>}

@@ -30,7 +30,7 @@ const validMileage = (value: string) => Number(value) > 0
 
 function App() {
   const liffEntry = new URLSearchParams(window.location.search).get('liff')
-  const initialScreen: Screen = liffEntry === 'report' ? 'report' : liffEntry === 'appointment' ? 'appointment' : liffEntry === 'change' ? 'appointment-change' : 'home'
+  const initialScreen: Screen = liffEntry === 'report' ? 'report' : liffEntry === 'appointment' ? 'chat' : liffEntry === 'change' ? 'appointment-change' : 'home'
   const existingAppointment: Appointment = { selectedDate: '2026-08-27', selectedTime: '11:00', serviceType: '定期保養', serviceDetail: '', name: '王小明', phone: '0912 345 678', plate: 'ABC-1234', carModel: 'Toyota Corolla Cross', mileage: '42350', note: '' }
   const [screen, setScreen] = useState<Screen>(initialScreen)
   const [appointment, setAppointment] = useState<Appointment>(liffEntry === 'change' ? existingAppointment : liffEntry === 'appointment' ? { ...existingAppointment, note: '最近冷氣出風較弱' } : emptyAppointment)
@@ -255,6 +255,7 @@ function ReportReview({ value, back, submit }: { value: VehicleReport; back: () 
 function ReportSubmitted({ value, next }: { value: VehicleReport; next: () => void }) { return <Page title="回報已送出" description="技師將透過 LINE 與您聯繫。" progress="4 / 4"><ResultIcon /><p className="result-message">我們已收到您的車況資訊。<br />技師將透過 LINE 與您聯繫。</p><Summary title="已送給技師" rows={[['車牌號碼', value.plate], ['目前里程', `${Number(value.mileage).toLocaleString('en-US')} km`], ['異常狀況', value.symptoms.join('、')], ['照片', value.files.length ? `已上傳 ${value.files.length} 個檔案` : '未上傳']]} /><button className="primary wide" onClick={next}>回 LINE 聊天室</button></Page> }
 function Chat({ go, events, messages, sendMessage, appointment, appointmentBeforeChange, changeDraft, assessmentReady, appointmentFromAssessment, openReschedule, openPersonalFeature }: { go: (s: Screen) => void; events: TimelineEvent[]; messages: string[]; sendMessage: (message: string) => void; appointment: Appointment; appointmentBeforeChange: AppointmentSlot; changeDraft: AppointmentSlot; assessmentReady: () => void; appointmentFromAssessment: () => void; openReschedule: () => void; openPersonalFeature: (screen: Screen) => void }) {
   const [input, setInput] = useState('')
+  const [showCallHelp, setShowCallHelp] = useState(false)
   const [infoMode, setInfoMode] = useState<'menu' | 'services' | 'faq' | null>(null)
   const [selectedService, setSelectedService] = useState('')
   const [selectedFaq, setSelectedFaq] = useState('')
@@ -283,6 +284,7 @@ function Chat({ go, events, messages, sendMessage, appointment, appointmentBefor
     '車子突然出現警示燈怎麼辦？': '若車況不明或擔心行車安全，請先安全停車，再使用快速回報車況或 LINE Call 聯絡技師。',
   }
   const openMenuItem = (target: Screen) => {
+    if (target === 'call') { setShowCallHelp(true); return }
     if (target === 'line-services') { setInfoMode('menu'); setSelectedService(''); setSelectedFaq(''); return }
     if (target === 'line-faq') { sendMessage('真人客服'); return }
     if (['appointment-records','repair-status','repair-record'].includes(target)) { openPersonalFeature(target); return }
@@ -290,6 +292,7 @@ function Chat({ go, events, messages, sendMessage, appointment, appointmentBefor
   }
   const submitMessage = () => { const message = input.trim(); if (!message) return; sendMessage(message); setInput('') }
   return <main className="line-room"><div className="line-native-bar"><button onClick={() => go('line-profile')}>←</button><b>LINE</b><span>聊天室</span></div><div className="line-chat-head"><span className="line-avatar">越</span><b>越群汽車官方帳號</b><button aria-label="LINE Call" onClick={() => go('call')}>☎</button></div><div className="chat hub-chat"><div className="bubble"><p>您好！👋<br />歡迎來到越群汽車！</p><p>想預約保養、查看維修進度，<br />或遇到車況問題，都可以從下方選單開始。</p><p>您傳送的訊息僅供越群服務人員查看，<br />請放心詢問。</p><p>💡 需要真人協助？輸入「找小編」<br />我們會於服務時間依序回覆您。</p></div>
+    {showCallHelp && <div className="bubble technician-call-help"><p>需要技師協助查看車況嗎？<br />請點選聊天室右上角的通話圖案，即可與技師聯繫。</p><p>通話前請先將車輛停妥，行駛中請勿操作手機；若暫時無人接聽，也可以先將目前的狀況與照片傳送至聊天室。</p></div>}
     {messages.map((message, index) => <div className="bubble user-bubble" key={`${message}-${index}`}>{message}</div>)}
     {has('editor-request') && <div className="bubble"><b>【已收到您的需求】</b><p>正在為您轉接真人服務，<br />越群服務人員將於服務時間依序回覆您。</p></div>}
     {has('editor-reply') && <div className="bubble"><b>【越群小編】</b><p>您好，我是越群服務人員 👋<br />請問需要協助什麼呢？</p></div>}

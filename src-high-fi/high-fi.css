@@ -520,8 +520,9 @@ body.high-fi .liff-change {
   --booking-ink: #111114;
   --booking-muted: #686870;
   --booking-line: #dedfe3;
-  width: 390px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 460px;
+  margin-inline: auto;
   background: #f6f7f9;
   color: var(--booking-ink);
   box-shadow: none;
@@ -1060,4 +1061,119 @@ body.high-fi footer > small { padding-top: 16px; border-top-color: var(--hf-hair
 @media (prefers-reduced-motion: reduce) {
   body.high-fi .carousel-track,
   body.high-fi .hf-review-track { scroll-behavior: auto; }
+}
+
+/* Hide the simulated device status bar in appointment views. */
+body.high-fi .liff-appointment .liff-status-bar,
+body.high-fi .liff-change .liff-status-bar { display: none; }
+
+/* Keep appointment views in a centered, independently scrollable phone viewport. */
+body.high-fi .shell.liff-appointment,
+body.high-fi .shell.liff-change {
+  height: 100dvh;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}
+body.high-fi .liff-appointment .liff-header,
+body.high-fi .liff-change .liff-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+@media (min-width: 480px) {
+  body.high-fi:has(.shell.liff-appointment),
+  body.high-fi:has(.shell.liff-change) { overflow-y: auto; scrollbar-width: none; }
+  body.high-fi .shell.liff-appointment,
+  body.high-fi .shell.liff-change {
+    height: 844px;
+    margin-block: 24px;
+  }
+}
+
+/* Hide scrollbar chrome while preserving native scrolling. */
+body.high-fi .shell.liff-appointment,
+body.high-fi .shell.liff-change { scrollbar-width: none; }
+body.high-fi .shell.liff-appointment::-webkit-scrollbar,
+body.high-fi .shell.liff-change::-webkit-scrollbar { display: none; }
+
+/* LINE-style chat presentation; existing markup and handlers remain intact. */
+body.high-fi .shell:has(> .line-room .hub-chat) { overflow: hidden; }
+body.high-fi .line-room:has(.hub-chat) {
+  height: 100%; min-height: 0; padding: 0;
+  display: grid; grid-template-rows: 44px 56px minmax(0, 1fr) auto auto;
+  background: #b9cddd;
+}
+body.high-fi .line-room:has(.hub-chat) .line-native-bar {
+  height: 44px; background: #293746;
+}
+body.high-fi .line-room:has(.hub-chat) .line-chat-head {
+  min-height: 56px; padding: 8px 14px; border: 0;
+  background: #293746; color: #fff; gap: 10px;
+}
+body.high-fi .line-room:has(.hub-chat) .line-avatar {
+  flex: 0 0 36px; height: 36px; border-radius: 10px; background: var(--hf-brand);
+}
+body.high-fi .line-room:has(.hub-chat) .line-chat-head b { font-size: 16px; }
+body.high-fi .line-room:has(.hub-chat) .line-chat-head button {
+  color: white; background: #06a849; border-radius: 8px; font-size: 22px;
+}
+body.high-fi .line-room .hub-chat {
+  min-height: 0; margin: 0; padding: 12px 18px;
+  overflow-y: auto; overscroll-behavior-y: contain; scrollbar-width: none;
+  background: #b9cddd;
+}
+body.high-fi .line-room .hub-chat::-webkit-scrollbar { display: none; }
+body.high-fi .line-room .hub-chat .bubble {
+  margin: 10px 24px 16px 8px; padding: 12px 16px; border-radius: 18px;
+  font-size: 14px; line-height: 1.65; background: #fff;
+}
+body.high-fi .line-room .hub-chat .user-bubble { margin-left: 40px; margin-right: 0; background: #9eea6a; }
+body.high-fi .line-room:has(.hub-chat) .rich-menu {
+  margin: 0; padding: 8px; gap: 6px; border: 0; background: #f5f6f7;
+}
+body.high-fi .line-room:has(.hub-chat) .rich-menu button {
+  min-height: 48px; padding: 10px 8px; border: 1px solid #e3e6e9;
+  border-radius: 8px; background: #fff; font-size: 13px; color: #23313e;
+  flex-direction: row; text-align: center;
+}
+body.high-fi .line-room:has(.hub-chat) .rich-menu button:hover { background: #eaf7ef; }
+body.high-fi .line-room:has(.hub-chat) .line-input {
+  min-height: 62px; padding: 8px; gap: 6px; border: 0;
+  border-top: 1px solid #e3e6e9; background: #fff;
+  grid-template-columns: 36px minmax(0,1fr) 36px;
+}
+body.high-fi .line-room:has(.hub-chat) .line-input input {
+  width: 100%; min-width: 0; height: 38px; padding: 8px 12px;
+  border: 1px solid #dde2e6; border-radius: 22px; background: #f7f8f9; font-size: 14px;
+}
+body.high-fi .line-room:has(.hub-chat) .line-input button {
+  width: 36px; height: 36px; border-radius: 50%; font-size: 22px;
+  background: #9aa3ac; color: white;
+}
+body.high-fi .line-room:has(.hub-chat) .line-input button:last-child { background: #06a849; font-size: 18px; }
+
+@media (min-width: 480px) {
+  body.high-fi:has(.shell.liff-appointment)::-webkit-scrollbar,
+  body.high-fi:has(.shell.liff-change)::-webkit-scrollbar { display: none; }
+}
+
+/* Align rich-menu icons and labels consistently in both columns. */
+body.high-fi .line-room:has(.hub-chat) .rich-menu button {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: center;
+  justify-content: stretch;
+  gap: 10px;
+  padding-inline: 16px;
+  text-align: left;
+}
+body.high-fi .line-room:has(.hub-chat) .rich-menu button svg {
+  width: 28px;
+  height: 28px;
+  justify-self: center;
+}
+body.high-fi .line-room:has(.hub-chat) .rich-menu button span {
+  min-width: 0;
+  text-align: left;
 }
